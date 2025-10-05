@@ -20,21 +20,15 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.5.0
+          terraform_version: 1.5.0  # or your installed version
 
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Terraform Init
-        run: terraform init -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT }}" \
-                             -backend-config="container_name=${{ secrets.AZURE_STORAGE_CONTAINER }}" \
-                             -backend-config="key=messfeedback.terraform.tfstate" \
-                             -backend-config="resource_group_name=${{ secrets.AZURE_STORAGE_RG }}"
+        run: terraform init
 
       - name: Terraform Validate
         run: terraform validate
